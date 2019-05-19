@@ -1,13 +1,12 @@
 {
-	"name": "Stylify - Unuglify",
+	"name": "Stylify - Style ugly internet up",
   "short_name": "Stylify",
-	"version": "1.0.1",
-	"description": "Helps with ugly websites. Makes reading experience even more clean.",
+	"version": "1.0.2",
+	"description": "Makes unsightly websites pretty in one click. Saves your eyesight. Monitors for best rules of web typography.",
 	"permissions": [
 		"activeTab",  
 		"storage",
 		"tabs",
-    "notifications",
     "http://*/",
     "https://*/"
     ],

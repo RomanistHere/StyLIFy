@@ -1,1 +1,247 @@
-"use strict";let lightMode1=document.getElementById("lightMode1");lightMode1.onchange=function(e){showMessage(),_gaq.push(["_trackEvent","lightMode1","changed"]),chrome.tabs.query({active:!0,currentWindow:!0},function(t){chrome.storage.sync.get("lightMode1Sites",function(o){var n=t[0].url,d=n.substring(n.lastIndexOf("//")+2,n.indexOf("/",8)),c=o.lightMode1Sites;e.target.checked?(chrome.tabs.executeScript(null,{file:"lightMode1.js"}),c.push(d),chrome.storage.sync.set({lightMode1Sites:c}),document.getElementById("lightMode1Text").textContent="off"):(c=c.filter(e=>e!==d),chrome.storage.sync.set({lightMode1Sites:c}),document.getElementById("lightMode1Text").textContent="on"),lightMode2.checked&&(document.getElementById("lightMode2").checked=!1,document.getElementById("lightMode2Text").textContent="on",chrome.storage.sync.get("lightMode2Sites",function(e){let t=e.lightMode2Sites;t=t.filter(e=>e!==d),chrome.storage.sync.set({lightMode2Sites:t})})),darkMode.checked&&(document.getElementById("darkMode").checked=!1,document.getElementById("darkModeText").textContent="on",chrome.storage.sync.get("darkModeSites",function(e){let t=e.darkModeSites;t=t.filter(e=>e!==d),chrome.storage.sync.set({darkModeSites:t})}))})})};let lightMode2=document.getElementById("lightMode2");lightMode2.onchange=function(e){showMessage(),_gaq.push(["_trackEvent","lightMode2","changed"]),chrome.tabs.query({active:!0,currentWindow:!0},function(t){chrome.storage.sync.get("lightMode2Sites",function(o){var n=t[0].url,d=n.substring(n.lastIndexOf("//")+2,n.indexOf("/",8)),c=o.lightMode2Sites;e.target.checked?(chrome.tabs.executeScript(null,{file:"lightMode2.js"}),c.push(d),chrome.storage.sync.set({lightMode2Sites:c}),document.getElementById("lightMode2Text").textContent="off"):(c=c.filter(e=>e!==d),chrome.storage.sync.set({lightMode2Sites:c}),document.getElementById("lightMode2Text").textContent="on"),lightMode1.checked&&(document.getElementById("lightMode1").checked=!1,document.getElementById("lightMode1Text").textContent="on",chrome.storage.sync.get("lightMode1Sites",function(e){let t=e.lightMode1Sites;t=t.filter(e=>e!==d),chrome.storage.sync.set({lightMode1Sites:t})})),darkMode.checked&&(document.getElementById("darkMode").checked=!1,document.getElementById("darkModeText").textContent="on",chrome.storage.sync.get("darkModeSites",function(e){let t=e.darkModeSites;t=t.filter(e=>e!==d),chrome.storage.sync.set({darkModeSites:t})}))})})};let darkMode=document.getElementById("darkMode");function initState(){chrome.tabs.query({active:!0,currentWindow:!0},function(e){chrome.storage.sync.get("lightMode1Sites",function(t){var o=e[0].url,n=o.substring(o.lastIndexOf("//")+2,o.indexOf("/",8));t.lightMode1Sites.includes(n)&&(document.getElementById("lightMode1").checked=!0,document.getElementById("lightMode1Text").textContent="off")})}),chrome.tabs.query({active:!0,currentWindow:!0},function(e){chrome.storage.sync.get("lightMode2Sites",function(t){var o=e[0].url,n=o.substring(o.lastIndexOf("//")+2,o.indexOf("/",8));t.lightMode2Sites.includes(n)&&(document.getElementById("lightMode2").checked=!0,document.getElementById("lightMode2Text").textContent="off")})}),chrome.tabs.query({active:!0,currentWindow:!0},function(e){chrome.storage.sync.get("darkModeSites",function(t){var o=e[0].url,n=o.substring(o.lastIndexOf("//")+2,o.indexOf("/",8));t.darkModeSites.includes(n)&&(document.getElementById("darkMode").checked=!0,document.getElementById("darkModeText").textContent="off")})})}function showMessage(){document.querySelector(".message").classList.add("message-visible"),document.querySelector(".message__link").onclick=function(){chrome.tabs.query({active:!0,currentWindow:!0},function(e){chrome.tabs.update(e[0].id,{url:e[0].url}),document.querySelector(".message").classList.remove("message-visible")})}}darkMode.onchange=function(e){showMessage(),_gaq.push(["_trackEvent","darkMode","changed"]),chrome.tabs.query({active:!0,currentWindow:!0},function(t){chrome.storage.sync.get("darkModeSites",function(o){var n=t[0].url,d=n.substring(n.lastIndexOf("//")+2,n.indexOf("/",8)),c=o.darkModeSites;e.target.checked?(chrome.tabs.executeScript(null,{file:"darkMode.js"}),c.push(d),chrome.storage.sync.set({darkModeSites:c}),document.getElementById("darkModeText").textContent="off"):(c=c.filter(e=>e!==d),chrome.storage.sync.set({darkModeSites:c}),document.getElementById("darkModeText").textContent="on"),lightMode1.checked&&(document.getElementById("lightMode1").checked=!1,document.getElementById("lightMode1Text").textContent="on",chrome.storage.sync.get("lightMode1Sites",function(e){let t=e.lightMode1Sites;t=t.filter(e=>e!==d),chrome.storage.sync.set({lightMode1Sites:t})})),lightMode2.checked&&(document.getElementById("lightMode2").checked=!1,document.getElementById("lightMode2Text").textContent="on",chrome.storage.sync.get("lightMode2Sites",function(e){let t=e.lightMode2Sites;t=t.filter(e=>e!==d),chrome.storage.sync.set({lightMode2Sites:t})}))})})},initState();var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-138501898-3"]),_gaq.push(["_trackPageview"]),function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://ssl.google-analytics.com/ga.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}(),document.getElementsByClassName("insturctions")[0].addEventListener("click",function(){_gaq.push(["_trackEvent","instructions","clicked"])});
+'use strict';
+
+// lightmode1 start
+let lightMode1 = document.getElementById('lightMode1')
+
+lightMode1.onchange = function(element) {
+	showMessage()
+	_gaq.push(['_trackEvent', 'lightMode1', 'changed'])
+  	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.storage.sync.get("lightMode1Sites", function(res) {
+			var url = tabs[0].url
+		    var newUrl = url.substring(
+			    url.lastIndexOf("//") + 2, 
+			    url.indexOf("/", 8)
+			)
+			var arrOfSites = res.lightMode1Sites
+
+			if (element.target.checked) {
+				chrome.tabs.executeScript(
+			      	null,
+			      	{file: 'lightMode1.js'}
+			  	)
+				arrOfSites.push(newUrl)
+				chrome.storage.sync.set({"lightMode1Sites": arrOfSites})
+				document.getElementById('lightMode1Text').textContent="off"
+			} else {			    	
+				arrOfSites = arrOfSites.filter(e => e !== newUrl)
+				chrome.storage.sync.set({"lightMode1Sites": arrOfSites})
+				document.getElementById('lightMode1Text').textContent="on"
+			}
+
+			if (lightMode2.checked) {
+				document.getElementById("lightMode2").checked = false
+				document.getElementById('lightMode2Text').textContent="on"
+				chrome.storage.sync.get("lightMode2Sites", function(res) {
+					let arrayForSync = res.lightMode2Sites
+					arrayForSync = arrayForSync.filter(e => e !== newUrl)
+					chrome.storage.sync.set({"lightMode2Sites": arrayForSync})
+				})
+			}
+
+			if (darkMode.checked) {
+				document.getElementById("darkMode").checked = false
+				document.getElementById('darkModeText').textContent="on"
+				chrome.storage.sync.get("darkModeSites", function(res) {
+					let arrayForSync = res.darkModeSites
+					arrayForSync = arrayForSync.filter(e => e !== newUrl)
+					chrome.storage.sync.set({"darkModeSites": arrayForSync})
+				})
+			}
+		})			
+    })
+}
+// lightmode1 finish
+
+// lightmode2 start
+let lightMode2 = document.getElementById('lightMode2')
+
+lightMode2.onchange = function(element) {
+	showMessage()
+	_gaq.push(['_trackEvent', 'lightMode2', 'changed'])
+  	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.storage.sync.get("lightMode2Sites", function(res) {
+			var url = tabs[0].url
+		    var newUrl = url.substring(
+			    url.lastIndexOf("//") + 2, 
+			    url.indexOf("/", 8)
+			)
+			var arrOfSites = res.lightMode2Sites
+
+			if (element.target.checked) {
+				chrome.tabs.executeScript(
+			      	null,
+			      	{file: 'lightMode2.js'}
+			  	)
+				arrOfSites.push(newUrl)
+				chrome.storage.sync.set({"lightMode2Sites": arrOfSites})
+				document.getElementById('lightMode2Text').textContent="off"
+			} else {			    	
+				arrOfSites = arrOfSites.filter(e => e !== newUrl)
+				chrome.storage.sync.set({"lightMode2Sites": arrOfSites})
+				document.getElementById('lightMode2Text').textContent="on"
+			}
+
+			if (lightMode1.checked) {
+				document.getElementById("lightMode1").checked = false
+				document.getElementById('lightMode1Text').textContent="on"
+				chrome.storage.sync.get("lightMode1Sites", function(res) {
+					let arrayForSync = res.lightMode1Sites
+					arrayForSync = arrayForSync.filter(e => e !== newUrl)
+					chrome.storage.sync.set({"lightMode1Sites": arrayForSync})
+				})
+			}
+
+			if (darkMode.checked) {
+				document.getElementById("darkMode").checked = false
+				document.getElementById('darkModeText').textContent="on"
+				chrome.storage.sync.get("darkModeSites", function(res) {
+					let arrayForSync = res.darkModeSites
+					arrayForSync = arrayForSync.filter(e => e !== newUrl)
+					chrome.storage.sync.set({"darkModeSites": arrayForSync})
+				})
+			}
+		})			
+    })
+}
+// lightmode2 finish
+
+// darkmode1 start
+let darkMode = document.getElementById('darkMode')
+
+darkMode.onchange = function(element) {
+	showMessage()
+	_gaq.push(['_trackEvent', 'darkMode', 'changed'])
+  	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.storage.sync.get("darkModeSites", function(res) {
+			var url = tabs[0].url
+		    var newUrl = url.substring(
+			    url.lastIndexOf("//") + 2, 
+			    url.indexOf("/", 8)
+			)
+			var arrOfSites = res.darkModeSites
+
+			if (element.target.checked) {
+				chrome.tabs.executeScript(
+			      	null,
+			      	{file: 'darkMode.js'}
+			  	)
+				arrOfSites.push(newUrl)
+				chrome.storage.sync.set({"darkModeSites": arrOfSites})
+				document.getElementById('darkModeText').textContent="off"
+			} else {			    	
+				arrOfSites = arrOfSites.filter(e => e !== newUrl)
+				chrome.storage.sync.set({"darkModeSites": arrOfSites})
+				document.getElementById('darkModeText').textContent="on"
+			}
+
+			if (lightMode1.checked) {
+				document.getElementById("lightMode1").checked = false
+				document.getElementById('lightMode1Text').textContent="on"
+				chrome.storage.sync.get("lightMode1Sites", function(res) {
+					let arrayForSync = res.lightMode1Sites
+					arrayForSync = arrayForSync.filter(e => e !== newUrl)
+					chrome.storage.sync.set({"lightMode1Sites": arrayForSync})
+				})
+			}
+
+			if (lightMode2.checked) {
+				document.getElementById("lightMode2").checked = false
+				document.getElementById('lightMode2Text').textContent="on"
+				chrome.storage.sync.get("lightMode2Sites", function(res) {
+					let arrayForSync = res.lightMode2Sites
+					arrayForSync = arrayForSync.filter(e => e !== newUrl)
+					chrome.storage.sync.set({"lightMode2Sites": arrayForSync})
+				})
+			}
+		})			
+    })
+}
+// darkmode1 finish
+
+
+
+// inits visual of popup on opening
+function initState() {
+	// lightmode1
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.storage.sync.get("lightMode1Sites", function(res) {
+			var url = tabs[0].url
+		    var newUrl = url.substring(
+			    url.lastIndexOf("//") + 2, 
+			    url.indexOf("/", 8)
+			)
+			var arrOfSites = res.lightMode1Sites
+
+			if (arrOfSites.includes(newUrl)) {
+				document.getElementById("lightMode1").checked = true
+				document.getElementById('lightMode1Text').textContent="off"
+			} 
+		})			
+    })
+
+	// lightmode2
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.storage.sync.get("lightMode2Sites", function(res) {
+			var url = tabs[0].url
+		    var newUrl = url.substring(
+			    url.lastIndexOf("//") + 2, 
+			    url.indexOf("/", 8)
+			)
+			var arrOfSites = res.lightMode2Sites
+
+			if (arrOfSites.includes(newUrl)) {
+				document.getElementById("lightMode2").checked = true
+				document.getElementById('lightMode2Text').textContent="off"
+			} 
+		})			
+    })
+
+    // darmode1
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.storage.sync.get("darkModeSites", function(res) {
+			var url = tabs[0].url
+		    var newUrl = url.substring(
+			    url.lastIndexOf("//") + 2, 
+			    url.indexOf("/", 8)
+			)
+			var arrOfSites = res.darkModeSites
+
+			if (arrOfSites.includes(newUrl)) {
+				document.getElementById("darkMode").checked = true
+				document.getElementById('darkModeText').textContent="off"
+			} 
+		})			
+    })
+}
+
+initState()
+
+// message with reload
+function showMessage() {
+	document.querySelector('.message').classList.add('message-visible')
+	document.querySelector('.message__link').onclick = function() {
+	    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+	        chrome.tabs.update(tabs[0].id, {url: tabs[0].url})
+	        document.querySelector('.message').classList.remove('message-visible')
+	    })
+	}
+}
+
+// ga
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-138501898-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script');
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'https://ssl.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(ga, s);
+})();
+
+document.getElementsByClassName('insturctions')[0].addEventListener('click', function(){
+	_gaq.push(['_trackEvent', 'instructions', 'clicked'])
+})
