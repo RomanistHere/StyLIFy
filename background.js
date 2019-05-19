@@ -7,6 +7,8 @@ chrome.runtime.onInstalled.addListener(function(details){
 		chrome.storage.sync.set({"lightMode1Sites": ['sethrobertson.github.io']})
 		chrome.storage.sync.set({"lightMode2Sites": []})
 		chrome.storage.sync.set({"darkModeSites": []})
+		// fixing mode 
+		chrome.storage.sync.set({"fixingMode": []})
 		// open site
 		chrome.tabs.create({url: "https://romanisthere.github.io/StyLIFy-Website/"})
     } else if(details.reason == "update"){

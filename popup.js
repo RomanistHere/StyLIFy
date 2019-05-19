@@ -159,6 +159,34 @@ darkMode.onchange = function(element) {
 }
 // darkmode1 finish
 
+// passive mode start
+// let fixingMode = document.getElementById('fixingMode')
+
+// fixingMode.onchange = function(element) {
+//     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+//     	// if on
+// 		if (fixingMode.checked) {
+// 	        // do magic
+// 			chrome.tabs.executeScript(
+// 	        	tabs[0].id,
+// 	          	{file: 'fixingMode.js'}
+// 	        )
+// 	        // set mode 
+// 	        chrome.storage.sync.set({"fixingMode": true})
+// 	        document.getElementById('fixingModeText').textContent="off"	
+// 	        // analysis
+// 	        _gaq.push(['_trackEvent', 'fixingMode', 'on'])
+// 		} else {
+// 			showMessage()
+// 	        // set mode
+// 	        chrome.storage.sync.set({"fixingMode": false})
+//     		document.getElementById('fixingModeText').textContent="on"
+//     		// analysis
+// 			_gaq.push(['_trackEvent', 'fixingMode', 'off'])
+// 		}
+//     })
+// }
+// passive mod efinish
 
 
 // inits visual of popup on opening
